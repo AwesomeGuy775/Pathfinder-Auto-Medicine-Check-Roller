@@ -52,17 +52,24 @@ public class AutoMedicineRoll{
             int totalHealth = 0;
             for(int j = 0; j < rollsPerPlayer; j++){
                 int rolled = ((int)(Math.random()*20))+1+modifier;
-                if(rolled>=DC+10){
+                int successLevel = 
+                    rolled>=DC+10 ? 4 :
+                    rolled>=DC ? 3 :
+                    rolled>=DC-10 ? 2 :
+                    1;
+                if(rolled==20) successLevel++;
+                if(rolled==1) successLevel--;
+                if(successLevel>=4){
                     for(int k = 0; k < Math.abs(DICE_PER_CRIT_SUCCESS); k++){
                         totalHealth+=((int)(((Math.random()*DICE_SIDES)+1)*Math.signum(DICE_PER_CRIT_SUCCESS)));
                     }
                 }
-                else if(rolled>=DC){
+                else if(successLevel==3){
                     for(int k = 0; k < Math.abs(DICE_PER_SUCCESS); k++){
                         totalHealth+=((int)(((Math.random()*DICE_SIDES)+1)*Math.signum(DICE_PER_SUCCESS)));
                     }
                 }
-                else if(rolled>=DC-10){
+                else if(successLevel==2){
                     for(int k = 0; k < Math.abs(DICE_PER_FAIL); k++){
                         totalHealth+=((int)(((Math.random()*DICE_SIDES)+1)*Math.signum(DICE_PER_FAIL)));
                     }
@@ -79,6 +86,6 @@ public class AutoMedicineRoll{
 
     public static void main(String[] args){
         AutoMedicineRoll Celne = new AutoMedicineRoll(7);
-        Celne.printRoll(4, 1);
+        Celne.printRoll(1, 500);
     }
 }
